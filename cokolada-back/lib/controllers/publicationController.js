@@ -22,6 +22,14 @@ class PublicationController {
         }
     };
 
+    async getPublicationById(params) {
+        try {
+            return await PublicationModel.find({ "_id": params.id });
+        } catch (error) {
+            console.log("lib::controllers::postController.js::getPublicationById\n",error);
+        }
+    };
+
     async createPublication(params) {
         try {
             const date = new Date().toISOString();

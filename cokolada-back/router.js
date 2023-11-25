@@ -28,6 +28,27 @@ router.get('/publication/:category/:number/:order?', async (req, res) => {
 });
 
 /**
+ * Retrieve the publication based on the specified id.
+ *
+ * Endpoint: GET http://localhost:8000/publication/:id
+ *
+ * @param {string} id - The id of the publication to retrieve.
+ * 
+ * @throws {Error} Will throw an error if there is an issue retrieving publications.
+ *
+ * @return {Object} A single publication that match the specified id.
+ */
+router.get('/publication/:id', async (req, res) => {
+    try{
+        const publication = await publicationController.getPublicationById(req.params);
+        res.status(200).json(publication);
+    } catch (err) {
+        console.log("router.js\n",err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+/**
  * Handle POST request to create a new publication.
  *
  * @param {Object} req.body - The request body containing publication details.
