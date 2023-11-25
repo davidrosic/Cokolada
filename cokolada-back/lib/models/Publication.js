@@ -12,7 +12,7 @@ const commentSchema = new Schema({
     }
 })
 
-const postSchema = new Schema({
+const publicationSchema = new Schema({
     category: {
         type: String,
         enum: ['Razvoj','Dizajn','Resursi','Magazin'],
@@ -44,4 +44,4 @@ const postSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model('Publication', publicationSchema);
