@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const publicationController = require('./lib/controllers/publicationController');
 const reportController = require('./lib/controllers/reportController');
+const scraperController = require('./lib/controllers/scraperController');
 const bodyParser = require('body-parser').urlencoded({ extended: true });
 
 /**
@@ -106,6 +107,38 @@ router.post('/report', async (req, res) => {
         const text = req.body.text;
         await reportController.createReport({email,text});
         res.json(0);
+    } catch(err) {
+        console.log("router.js\n",err);
+    }
+});
+
+/**
+ * Handle POST request to use the webscraper to acquire the from fonts from another website.
+ * 
+ * 
+ * @throws {Object} - JSON object with an 'error' property if an error occurs during the process.
+ */
+
+router.post('/scraper', async (req, res) => {
+    try{
+        await scraperController.createScrapers();
+        res.json(0);
+    } catch(err) {
+        console.log("router.js\n",err);
+
+    }
+});
+/**
+ * Handle GET request to display the fonts that the webscraper found on another website.
+ * 
+ * Endpoint: GET http://localhost:8000/scraper/
+ * 
+ * @throws {Object} - JSON object with an 'error' property if an error occurs during the process.
+ */
+router.get('/scraper', async (req, res) => {
+    try{
+        const scrapers = await scraperController.getScraper();
+        res.json(scrapers);
     } catch(err) {
         console.log("router.js\n",err);
     }

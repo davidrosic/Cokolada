@@ -1,5 +1,5 @@
 const performScraping = require('../scraper/Scraper');
-const ScraperModel = require('../models/Report');
+const ScraperModel = require('../models/Scraper');
 
 const fetchData = async () => {
   try {
@@ -37,38 +37,40 @@ const processLinks = (link) => {
   }
 };
 
-fetchData();
+
 
 class ScraperController {
     async getScrapers() {
-        try{
+        try {
             return await ScraperModel.find();
-        } catch(error) {
-            console.log("lib::controllers::scrapeController.js::getScrapers\n",error);
+        } catch (error) {
+            console.log("lib::controllers::scrapeController.js::getScrapers\n", error);
         }
-    };
+    }
 
     async createScrapers() {
-        try{
-            const url = linkJSON.url;
-            const linkName = linkJSON.linkName;
+        try {
+            const linkArray = await fetchData(); // Wait for fetchData to complete
 
-            if(await ScraperModel.findOne({linkName: linkName}).exec()){
-                return "Font is already in DB!"
-            } else {
+            console.log(linkArray);
 
-                if(url==="undefined" || linkName==="undefined"){
-                    return "Error"
+            for (let link of linkArray) {
+                if (await ScraperModel.findOne({ linkName: link.linkName }).exec()) {
+                    console.log("Font is already in DB!");
                 } else {
-                    await ScraperModel.create({"url": url, "linkName": linkName});
-                    return "Created report!";
+                    if (link.url === "undefined" || link.linkName === "undefined") {
+                        console.log("Error");
+                    } else {
+                        await ScraperModel.create({ "url": link.url, "linkName": link.linkName });
+                        console.log("Created report!");
+                    }
                 }
-
             }
-
-
-        } catch(error) {
-            console.log("lib::controllers::reportScraper.js::createScraper\n",error);
+        } catch (error) {
+            console.log("lib::controllers::reportScraper.js::createScraper\n", error);
         }
     }
 }
+
+const scraperController = new ScraperController();
+module.exports = scraperController;
