@@ -38,7 +38,6 @@ const processLinks = (link) => {
 };
 
 
-
 class ScraperController {
     async getScrapers() {
         try {

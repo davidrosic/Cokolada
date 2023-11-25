@@ -13,9 +13,7 @@ class PublicationController {
             if (number === "undefined") {
                 return await PublicationModel.find({ "category": category }).sort({ "date": order });
             } else {
-                const temp = await PublicationModel.find({ "category": category }).sort({ "date": order }).limit(number);
-                console.log(temp)
-                return temp;
+                return await PublicationModel.find({ "category": category }).sort({ "date": order }).limit(number);
             }
         } catch (error) {
             console.log("lib::controllers::postController.js::getPublications\n",error);

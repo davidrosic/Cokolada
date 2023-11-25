@@ -137,7 +137,7 @@ router.post('/scraper', async (req, res) => {
  */
 router.get('/scraper', async (req, res) => {
     try{
-        const scrapers = await scraperController.getScraper();
+        const scrapers = await scraperController.getScrapers();
         res.json(scrapers);
     } catch(err) {
         console.log("router.js\n",err);
