@@ -1,4 +1,5 @@
 const PublicationModel = require('../models/Publication');
+const moment = require('moment');
 
 class PublicationController {
     async getPublications(params) {
@@ -6,14 +7,21 @@ class PublicationController {
             const category = params.category;
             const number = params.number;
             let order = params.order;
+            let query;
+
+            if ( category === "razvoj" || category === "dizajn" || category === "resursi" ) {
+                query = { "category": category };
+            } else {
+                query = {};
+            }
 
             if ( order === "desc" ) { order = -1 }
             else { order = 1 }
 
             if (number === "undefined") {
-                return await PublicationModel.find({ "category": category }).sort({ "date": order });
+                return await PublicationModel.find(query).sort({ "date": order });
             } else {
-                return await PublicationModel.find({ "category": category }).sort({ "date": order }).limit(number);
+                return await PublicationModel.find(query).sort({ "date": order }).limit(number);
             }
         } catch (error) {
             console.log("lib::controllers::postController.js::getPublications\n",error);
@@ -30,7 +38,10 @@ class PublicationController {
 
     async createPublication(params) {
         try {
-            const date = new Date().toISOString();
+            moment.locale("sr-cyrl");
+            const displayDate = moment().format('LLL');  // 26. новембар 2023. 0:14
+            const date = new Date();
+            params.displayDate = displayDate;
             params.date = date;
             await PublicationModel.create(params);
         } catch (error) {

@@ -15,8 +15,8 @@ const commentSchema = new Schema({
 const publicationSchema = new Schema({
     category: {
         type: String,
-        enum: ['Razvoj','Dizajn','Resursi','Magazin'],
-        default: 'Magazin'
+        enum: ['razvoj','dizajn','resursi','magazin'],
+        default: 'magazin'
     },
     title: {
         type: String,
@@ -30,12 +30,20 @@ const publicationSchema = new Schema({
         type: String,
         required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
     author: {
         type: String,
         default: "Власник"
     },
     date: {
         type: Date,
+        required: true
+    },
+    displayDate: {
+        type: String,
         required: true
     },
     comments: {
