@@ -9,17 +9,7 @@ const fetchData = async () => {
     const linksAdvanced = await performScrapingAdvanced();
     const uniqueArrayAdvanced = [...new Set(linksAdvanced)];
 
-    uniqueArray.forEach(link => {
-		try {
-			const parts = link.split('/');
-			const linkName = parts[parts.length - 1].split('?')[0];
-			linkJSON.push({url:link, linkName: linkName});
-		} catch (err) {
-			linkJSON.push({url:link, linkName: "Unknown"});
-		}
-    });
-
-    uniqueArrayAdvanced.forEach(link => {
+	const processLinks = (link) => {
 		try {
 			const parts = link.split('/');
 			const linkName = parts[parts.length - 2];
@@ -27,9 +17,19 @@ const fetchData = async () => {
 		} catch (err) {
 			linkJSON.push({url:link, linkName: "Unknown"});
 		}
+	};
+
+	uniqueArrayAdvanced.forEach(link => {
+		let linkName = processLinks(link);
+        linkJSON.push({url:link, linkName:linkName});
     });
 
-    return linkJSON; 
+    uniqueArray.forEach(link => {
+		let linkName = processLinks(link);
+        linkJSON.push({url:link, linkName:linkName});
+    });
+
+    return linkJSON;
   } catch (error) {
     console.error("Error:", error.message);
     throw error; 
@@ -49,14 +49,14 @@ class ScraperController {
 		try {
 			const linkArray = await fetchData();
 			for (let link of linkArray) {
+				console.log(link);
 				if (await ScraperModel.findOne({ linkName: link.linkName }).exec()) {
 					console.log("Font is already in DB!");
 				} else {
-					if (link.url === "undefined" || link.linkName === "undefined") {
+					if ( link.url === undefined || link.linkName === undefined || link.url === "" || link.linkName === "" ) {
 						console.log("Error");
 					} else {
 						await ScraperModel.create({ "url": link.url, "linkName": link.linkName });
-						console.log("Created report!");
 					}
 				}
 			}

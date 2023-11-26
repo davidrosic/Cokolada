@@ -144,6 +144,7 @@ router.post('/scraper', async (req, res) => {
 
     }
 });
+
 /**
  * Handle GET request to display the fonts that the webscraper found on another website.
  * 

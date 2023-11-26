@@ -6,7 +6,7 @@ const performScraping = async () => {
     try {
         const axiosResponse = await axios.request({
             method: "GET",
-            url: "https://fonts.google.com/?subset=cyrillic-ext&noto.lang=bg_Cyrl",
+            url: "https://fontesk.com/tag/cyrillic/",
             headers: {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36"
             }
@@ -15,9 +15,10 @@ const performScraping = async () => {
         const links = [];
         const aElements = $('a');
 
+        const regex = /font\/$/;
         aElements.each((index, element) => {
             const hrefValue = $(element).attr('href');
-            if (hrefValue) { links.push(hrefValue); }
+            if (hrefValue && regex.test(hrefValue)) { links.push(hrefValue); }
         });
 
         return links;
