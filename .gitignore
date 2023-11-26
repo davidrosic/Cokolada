@@ -125,6 +125,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-cokolada-back/package-lock.json
-cokolada-back/package.json
