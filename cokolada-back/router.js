@@ -91,30 +91,46 @@ router.post('/publication/comment', bodyParser, async (req, res) => {
     }
 });
 
+/**
+ * Handle GET request for a report in the db.
+ * 
+ * Does not take any params
+ *
+ * @throws {Object} - JSON object with an 'error' property if an error occurs during the process.
+ */
 router.get('/report', async (req,res) => {
     try{
         const reports = await reportController.getReports();
         res.json(reports);
     } catch(err) {
         console.log("router.js\n",err);
+        res.status(500).json({ error: "Error while posting comment!" });
     }
 });
 
-router.post('/report', async (req, res) => {
+/**
+ * Handle POST request to create a report in the db.
+ *
+ * @param {Object} req.body - The request body containing comment details.
+ * @param {string} req.body.email - The email associated with the report.
+ * @param {string} req.body.text - The text content of the report.
+ * 
+ * @throws {Object} - JSON object with an 'error' property if an error occurs during the process.
+ */
+router.post('/report', bodyParser, async (req, res) => {
     try{
-        console.log(req.body);
         const email = req.body.email;
         const text = req.body.text;
-        await reportController.createReport({email,text});
-        res.json(0);
+        const result = await reportController.createReport({email,text});
+        res.status(200).json({"message": result});
     } catch(err) {
         console.log("router.js\n",err);
+        res.status(500).json({ error: "Error while creating report!" });
     }
 });
 
 /**
  * Handle POST request to use the webscraper to acquire the from fonts from another website.
- * 
  * 
  * @throws {Object} - JSON object with an 'error' property if an error occurs during the process.
  */

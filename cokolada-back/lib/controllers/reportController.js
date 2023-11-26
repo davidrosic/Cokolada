@@ -22,6 +22,7 @@ class ReportController {
             }           
         } catch(error) {
             console.log("lib::controllers::reportController.js::createReport\n",error);
+            return "Error"
         }
     };
 
